@@ -10,27 +10,22 @@ import javax.validation.constraints.Size;
 @Table(name = "users")
 public class User extends AuditModel{
     @Id
-    @GeneratedValue(generator = "user_generator")
-    @SequenceGenerator(
-            name = "user_generator",
-            sequenceName = "user_sequence",
-            initialValue = 1,
-            allocationSize = 1
-    )
-    private Long id;
-
-    @NotBlank
     @Column(name = "userName", columnDefinition = "text", unique = true)
     @Size(min = 5, max = 100)
     private String userName;
 
-    public Long getUserId() {
-        return id;
+    @NotBlank
+    @Column(name = "fullName", columnDefinition = "text")
+    private String fullName;
+
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setUserId(Long userId) {
-        this.id = userId;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
+
 
     public String getUserName() {
         return userName;

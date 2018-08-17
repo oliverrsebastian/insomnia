@@ -15,36 +15,41 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/user/{userId}")
-    public Optional<User> getUserDetail(@PathVariable Long userId) {
-        return userRepository.findById(userId);
+    @GetMapping("/user/{userName}")
+    public Optional<User> getUserDetail(@PathVariable String userName) {
+        return userRepository.findById(userName);
     }
 
 
-    @PostMapping("/user")
+    @PostMapping("/user/register")
     public User createUser(@Valid @RequestBody User user) {
-        return userRepository.save(user);
+
+        if(!userRepository.existsById(user.getUserName()))
+        {
+            return userRepository.save(user);
+        }
+       throw new ResourceNotFoundException("User already exist with username " + user.getUserName());
     }
 
 
-    @PutMapping("/user/{userId}")
-    public User updateUser(@PathVariable Long userId,
+    @PutMapping("/user/{userName}/update")
+    public User updateUser(@PathVariable String userName,
                            @Valid @RequestBody User userRequest) {
-        return userRepository.findById(userId)
+        return userRepository.findById(userName)
                 .map(user -> {
                     user.setUserName(userRequest.getUserName());
-//                    user.set(questionRequest.getDescription());
+                    user.setFullName(userRequest.getFullName());
                     return userRepository.save(user);
-                }).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+                }).orElseThrow(() -> new ResourceNotFoundException("User not found with username " + userName));
     }
 
 
-    @DeleteMapping("/user/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        return userRepository.findById(userId)
+    @DeleteMapping("/user/{userName}/delete")
+    public ResponseEntity<?> deleteUser(@PathVariable String userName) {
+        return userRepository.findById(userName)
                 .map(user -> {
                     userRepository.delete(user);
                     return ResponseEntity.ok().build();
-                }).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+                }).orElseThrow(() -> new ResourceNotFoundException("User not found with username " + userName));
     }
 }
