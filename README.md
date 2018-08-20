@@ -9,7 +9,7 @@
 	POSTMan -> GET Method Link : localhost:8080/users/YOUR USER_NAME HERE
 
 3. Untuk menambah User
-	POSTMan -> POST Method Link : localhost:8080/user/register
+	POSTMan -> POST Method Link : localhost:8080/users/register
 	Format : 
 	{
 		"userName" : "YOUR USER NAME HERE",
@@ -17,7 +17,7 @@
 	}
 
 4. Untuk mengupdate data User
-	POSTMan -> PUT Method Link : localhost:8080/user/YOUR USER_NAME HERE/update
+	POSTMan -> PUT Method Link : localhost:8080/users/YOUR USER_NAME HERE/update
 	Format : 
 	{
 		"userName" : "YOUR USER NAME HERE",
@@ -25,7 +25,7 @@
 	}
 
 5. Untuk delete User
-	POSTMan -> DELETE Method Link : localhost:8080/user/YOUR USER_NAME HERE/delete
+	POSTMan -> DELETE Method Link : localhost:8080/users/YOUR USER_NAME HERE/delete
 
 
 //UNTUK TODO ITEMS
