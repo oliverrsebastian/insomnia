@@ -20,12 +20,12 @@ public class TodoController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/user/{userId}/todo")
+    @GetMapping("/users/{userName}/todo")
     public List<Todo> getItemByUserId(@PathVariable String userName) {
         return todoRepository.findAllByUserUserName(userName);
     }
 
-    @PostMapping("/user/{userName}/todo/insert")
+    @PostMapping("/users/{userName}/todo/insert")
     public Todo addItem(@PathVariable String userName,
                             @Valid @RequestBody Todo todoItem) {
         return userRepository.findById(userName)
@@ -36,7 +36,7 @@ public class TodoController {
                 }).orElseThrow(() -> new ResourceNotFoundException("User not found with username " + userName));
     }
 
-    @PutMapping("/user/{userName}/todo/{itemId}/update")
+    @PutMapping("/users/{userName}/todo/{itemId}/update")
     public Todo updateItem(@PathVariable String userName,
                                @PathVariable Long itemId,
                                @Valid @RequestBody Todo ItemRequest) {
@@ -46,12 +46,13 @@ public class TodoController {
 
         return todoRepository.findById(itemId)
                 .map(todoItem -> {
+                    todoItem.setItemTitle(ItemRequest.getItemTitle());
                     todoItem.setItemDescription(ItemRequest.getItemDescription());
                     return todoRepository.save(todoItem);
                 }).orElseThrow(() -> new ResourceNotFoundException("Item not found with id " + itemId));
     }
 
-    @DeleteMapping("/user/{userId}/todo/{itemId}/delete")
+    @DeleteMapping("/users/{userName}/todo/{itemId}/delete")
     public ResponseEntity<?> deleteItem(@PathVariable String userName,
                                         @PathVariable Long itemId) {
         if(!userRepository.existsById(userName)) {

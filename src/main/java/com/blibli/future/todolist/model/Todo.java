@@ -20,11 +20,22 @@ public class Todo extends AuditModel{
     )
     private Long id;
 
+    public String getItemTitle() {
+        return itemTitle;
+    }
+
+    public void setItemTitle(String itemTitle) {
+        this.itemTitle = itemTitle;
+    }
+
+    @Column(columnDefinition = "text")
+    private String itemTitle;
+
     @Column(columnDefinition = "text")
     private String itemDescription;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "userName", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;

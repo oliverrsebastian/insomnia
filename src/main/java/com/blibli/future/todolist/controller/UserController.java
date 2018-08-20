@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,13 +16,18 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/user/{userName}")
+    @GetMapping("/users")
+    public List<User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    @GetMapping("/users/{userName}")
     public Optional<User> getUserDetail(@PathVariable String userName) {
         return userRepository.findById(userName);
     }
 
 
-    @PostMapping("/user/register")
+    @PostMapping("/users/register")
     public User createUser(@Valid @RequestBody User user) {
 
         if(!userRepository.existsById(user.getUserName()))
@@ -32,19 +38,18 @@ public class UserController {
     }
 
 
-    @PutMapping("/user/{userName}/update")
+    @PutMapping("/users/{userName}/update")
     public User updateUser(@PathVariable String userName,
                            @Valid @RequestBody User userRequest) {
         return userRepository.findById(userName)
                 .map(user -> {
-                    user.setUserName(userRequest.getUserName());
                     user.setFullName(userRequest.getFullName());
                     return userRepository.save(user);
                 }).orElseThrow(() -> new ResourceNotFoundException("User not found with username " + userName));
     }
 
 
-    @DeleteMapping("/user/{userName}/delete")
+    @DeleteMapping("/users/{userName}/delete")
     public ResponseEntity<?> deleteUser(@PathVariable String userName) {
         return userRepository.findById(userName)
                 .map(user -> {
